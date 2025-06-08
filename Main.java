@@ -30,7 +30,6 @@ public class VulnerableLogin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         scanner.close();
     }
 }
