@@ -23,7 +23,7 @@ function getAllFilesInFolder(dir) {
 async function scanFile(filePath) {
     const code = fs.readFileSync(filePath, 'utf-8');
 
-    const typeRes = await fetch('http://127.0.0.1:8000/detect-type', {
+    const typeRes = await fetch('http://102.37.140.196:8000/detect-type', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code })
@@ -32,12 +32,12 @@ async function scanFile(filePath) {
     const { vulnerability_types } = await typeRes.json();
 
     const [lineRes, fixRes] = await Promise.all([
-        fetch('http://127.0.0.1:8000/detect-lines', {
+        fetch('http://102.37.140.196:8000/detect-lines', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code, vulnerability_types })
         }),
-        fetch('http://127.0.0.1:8000/fix', {
+        fetch('http://102.37.140.196:8000/fix', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code, vulnerability_types })
