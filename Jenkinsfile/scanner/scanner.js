@@ -60,11 +60,15 @@ async function scanFile(filePath) {
 async function main() {
     const files = getAllFilesInFolder(folderPath);
     const results = [];
+    let hasVulnerabilities = false;
 
     for (const file of files) {
         try {
             const result = await scanFile(file);
             results.push(result);
+            if (result.vulnerabilities.some(v => v.type)) {
+                hasVulnerabilities = true;
+            }
         } catch (e) {
             console.error(`Failed to scan ${file}: ${e.message}`);
         }
@@ -72,6 +76,12 @@ async function main() {
 
     fs.writeFileSync('vuln-report.json', JSON.stringify(results, null, 2));
     console.log('✅ Scan complete. Report saved to vuln-report.json');
+
+    // Exit with code 1 if any vulnerability found
+    if (hasVulnerabilities) {
+        console.error('🚨 Vulnerabilities detected.');
+        process.exit(1);
+    }
 }
 
 main();
