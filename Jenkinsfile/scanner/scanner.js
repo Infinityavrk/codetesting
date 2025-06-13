@@ -66,21 +66,31 @@ async function main() {
         try {
             const result = await scanFile(file);
             results.push(result);
-            if (result.vulnerabilities.some(v => v.type)) {
+
+            if (result.vulnerabilities.length > 0) {
                 hasVulnerabilities = true;
+
+                console.log(`\n🔍 Vulnerabilities found in file: ${file}`);
+                result.vulnerabilities.forEach(vul => {
+                    console.log(`  🔸 Type: ${vul.type}`);
+                    console.log(`  🔹 Line: ${vul.line}`);
+                    console.log(`  🛠️ Fix: ${vul.fix}`);
+                    console.log('---------------------------');
+                });
             }
         } catch (e) {
-            console.error(`Failed to scan ${file}: ${e.message}`);
+            console.error(`❌ Failed to scan ${file}: ${e.message}`);
         }
     }
 
-    fs.writeFileSync('vuln-report.json', JSON.stringify(results, null, 2));
-    console.log('✅ Scan complete. Report saved to vuln-report.json');
+    #fs.writeFileSync('vuln-report.json', JSON.stringify(results, null, 2));
+    #console.log('\n📄 Report saved to vuln-report.json');
 
-    // Exit with code 1 if any vulnerability found
     if (hasVulnerabilities) {
-        console.error('🚨 Vulnerabilities detected.');
+        console.error('\n🚨 Vulnerabilities detected. Failing the build.');
         process.exit(1);
+    } else {
+        console.log('\n✅ No vulnerabilities found. Build safe to proceed.');
     }
 }
 
