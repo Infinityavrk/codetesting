@@ -83,8 +83,8 @@ async function main() {
         }
     }
 
-    #fs.writeFileSync('vuln-report.json', JSON.stringify(results, null, 2));
-    #console.log('\n📄 Report saved to vuln-report.json');
+    //fs.writeFileSync('vuln-report.json', JSON.stringify(results, null, 2));
+    //console.log('\n📄 Report saved to vuln-report.json');
 
     if (hasVulnerabilities) {
         console.error('\n🚨 Vulnerabilities detected. Failing the build.');
